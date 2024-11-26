@@ -580,6 +580,32 @@
             });
     }
 
+    //pkg
+    function showCafeImg(cafeImageUrl) {
+        // photo가 배열이 아닌 경우 배열로 변환
+
+        // 그리드 레이아웃 스타일 적용 (이미지가 그리드 형태로 표시되도록)
+        cafeDetails.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';  // 그리드 칸 크기 설정
+        cafeDetails.style.display = 'grid';
+        cafeDetails.style.gap = '10px';  // 이미지 간 간격
+
+        // 기존 이미지들 제거 (중복 추가 방지)
+        cafeDetails.innerHTML = '';
+
+        // 이미지 URL 리스트에서 이미지 태그 생성 및 추가
+
+        console.log(cafeImageUrl);
+        const img = document.createElement("img"); // <img> 태그 생성
+        img.src = cafeImageUrl; // 이미지 URL 설정
+        img.alt = "카페 이미지"; // 대체 텍스트
+        img.style.width = '100%';  // 이미지가 그리드 칸에 맞게 채워지도록 설정
+        img.style.height = 'auto'; // 비율에 맞게 이미지 크기 조정
+
+        // 이미지 태그를 그리드 컨테이너에 추가
+        cafeDetails.appendChild(img);
+
+    }
+
     document.getElementById('review-link').addEventListener('click', function (event) {
         event.preventDefault();
 
@@ -730,6 +756,16 @@
             }
         });
 
+        //pkg
+        document.getElementById('photos-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            if (selectedCafe) {
+                showCafeImg(selectedCafe.cafeImageUrl);
+            } else {
+                alert("먼저 카페를 선택해주세요.");
+            }
+        });
+
         // 마커 추가 및 클릭 이벤트 등록
         cafes.forEach(function(cafe, index) {
             var markerPosition = new kakao.maps.LatLng(cafe.location.latitude, cafe.location.longitude);
@@ -875,7 +911,7 @@
                 address: address,
                 description: description,
                 menus: menus,
-                reviews: reviews // 리뷰 추가
+                reviews: reviews, // 리뷰 추가
             };
             showCafeInfo(name, address, description);
             // ... 나머지 코드
